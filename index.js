@@ -19,6 +19,7 @@ var collectedAddresses = [], startBlock, lastBlock;
  * @description input the number of start block
  */
 const initApp = async () => {
+    //read blocknumber from console readline
     readline.question("Please input block number: ", async (blockNumber) => {
 
         startBlock = blockNumber;
@@ -27,7 +28,6 @@ const initApp = async () => {
         await mainProcess(startBlock, lastBlock);
     })
 }
-
 
 /**
  * 
@@ -43,6 +43,7 @@ const mainProcess = async (startBlock, lastBlock) => {
     let block;
     for (let i = startBlock; i <= lastBlock; i++) {
 
+        //get block and transactions from blocknumber
         try {
             block = await provider.getBlockWithTransactions(Number(i));
             console.log(`Block ${i}_>`);
@@ -50,10 +51,13 @@ const mainProcess = async (startBlock, lastBlock) => {
             continue;
         }
 
+        //scan each transaction in block
         for await (const transaction of block.transactions) {
 
+            //check if any smart contract created with this transaction
             if (transaction?.creates !== null) {
 
+                //check if created smart contract is ERC721 or not
                 try {
                     const contract = new ethers.Contract(transaction?.creates, ERC721.abi, provider);
                     await contract.name();
@@ -64,13 +68,15 @@ const mainProcess = async (startBlock, lastBlock) => {
             }
         }
 
+        //print result on console
         if (collectedAddresses.length > 0) {
             console.log(`For block ${i}: `, collectedAddresses);
             collectedAddresses = [];
             console.log("\nSearching...");
         }
     }
+    //close console readline
     readline.close();
 }
 
-initApp();
+initApp(); //start app
