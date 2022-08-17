@@ -1,4 +1,4 @@
-# testassignment-nodejs-web3
+# web3-blockscanner
 ## Node.js 16.16.0 && npm 6.14.14
 
 ```
