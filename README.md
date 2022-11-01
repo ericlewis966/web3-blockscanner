@@ -1,5 +1,6 @@
 # web3-blockscanner
 ## Node.js 16.16.0 && npm 6.14.14
+### Scan blocks and its all transactions to find ERC721 Smart Contract creation transaction and contract addresses.
 
 ```
 npm install
