@@ -60,9 +60,14 @@ const mainProcess = async (startBlock, lastBlock) => {
                 //check if created smart contract is ERC721 or not
                 try {
                     const contract = new ethers.Contract(transaction?.creates, ERC721.abi, provider);
-                    await contract.name();
-                    collectedAddresses.push(transaction?.creates);
-                } catch (err) {
+                    const isERC721 = await contract.supportsInterface('0x80ac58cd');
+                    if(isERC721) {
+                        collectedAddresses.push(transaction?.creates);
+                    }
+                    else {
+                        continue;
+                    }
+                } catch (_) {
                     continue;
                 }
             }
